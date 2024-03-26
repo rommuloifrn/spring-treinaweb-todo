@@ -6,7 +6,15 @@
     <title>TWNotes!</title>
 </head>
 <body>
+    <a href="/todos">lista</a>
     <h1>Hi!</h1>
     this is a notes app.
+    <p th:text="${nome}"></p>
+
+    <p th:each="aluno:${alunos}" th:text="${aluno}">nomepadrao</p>
+
+    <hr>
+
+    <p th:if="${ehProgramador}">A variável é programador está true</p>
 </body>
 </html>
