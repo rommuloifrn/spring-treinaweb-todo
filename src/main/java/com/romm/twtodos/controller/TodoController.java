@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.romm.twtodos.entity.Todo;
 import com.romm.twtodos.repository.TodoRepository;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("/todos")
@@ -59,4 +61,23 @@ public class TodoController {
 
         return "redirect:/todos";
     }
+
+    @GetMapping("/delete/{id}")
+    public ModelAndView delete(@PathVariable Long id) {
+        var todo = todoRepository.findById(id);
+
+        if (todo.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return new ModelAndView("todo/delete", Map.of("todo", todo.get()));
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(Todo todo) {
+        todoRepository.delete(todo);
+
+        return "redirect:/todos";
+    }
+    
 }
