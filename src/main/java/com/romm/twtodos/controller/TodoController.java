@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -32,7 +33,7 @@ public class TodoController {
     @GetMapping()
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("todo/list");
-        modelAndView.addObject("todos", todoRepository.findAll());
+        modelAndView.addObject("todos", todoRepository.findAll(Sort.by("deadline")));
         return modelAndView;
         // return modelAndView("todo/list", Map.of("todos", todoRepository.findAll()));
     }

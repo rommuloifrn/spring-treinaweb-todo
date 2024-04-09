@@ -36,9 +36,9 @@
                 <td th:text="${#temporals.format(todo.finishedAt)} ?: '-'"></td>
                 <td>
                     <form class="d-inline" th:action="@{todos/finish/{id}(id=${todo.id})}" method="post">
-                      <input class="btn btn-sm btn-primary" type="submit" value="Concluir">
+                      <input class="btn btn-sm btn-primary" type="submit" value="Concluir" th:classappend="${todo.finishedAt} ? 'disabled' : ''">
                     </form>
-                    <a th:href="@{todos/edit/{id}(id=${todo.id})}" class="btn btn-sm btn-secondary">Editar</a>
+                    <a th:href="@{todos/edit/{id}(id=${todo.id})}" th:classappend="${todo.finishedAt} ? 'disabled' : ''" class="btn btn-sm btn-secondary">Editar</a>
                     <a th:href="@{todos/delete/{id}(id=${todo.id})}" class="btn btn-sm btn-danger">Excluir</a>
                 </td>
               </tr>
