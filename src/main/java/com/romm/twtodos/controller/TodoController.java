@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.romm.twtodos.entity.Todo;
 import com.romm.twtodos.repository.TodoRepository;
+
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -39,7 +43,9 @@ public class TodoController {
     }
 
     @PostMapping("/create")
-    public String create(Todo todo) {
+    public String create(@Valid Todo todo, BindingResult result) {
+        if (result.hasErrors()) return "todo/form";
+
         todoRepository.save(todo);
         return "redirect:/todos";
     }
@@ -55,7 +61,8 @@ public class TodoController {
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(/*@PathVariable Long id, */Todo todo) {
+    public String edit(/*@PathVariable Long id, */@Valid Todo todo, BindingResult result) {
+        if (result.hasErrors()) return "todo/form";
         //todo.setId(id);
         todoRepository.save(todo);
 
@@ -79,5 +86,18 @@ public class TodoController {
 
         return "redirect:/todos";
     }
+
+    @PostMapping("/finish/{id}")
+    public String finish(@PathVariable Long id) {
+        Optional<Todo> optional = todoRepository.findById(id);
+        if (optional.isEmpty()) 
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        Todo todo = optional.get();
+        todo.finish();
+        todoRepository.save(todo);
+
+        return "redirect:/todos";
+    }
+    
     
 }
